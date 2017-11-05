@@ -24,7 +24,6 @@ let ctx = null;
 let currentDirection = null;
 
 window.onload = () => {
-    console.log('loaded...');
     Canvas = document.getElementById('snake');
     document.addEventListener('keydown', keyPushed);
     Canvas.style.width = '400px';
@@ -36,10 +35,10 @@ window.onload = () => {
 };
 
 let directionalFlow = {
-    37: () => Snake.posx -= 10,
-    39: () => Snake.posx += 10,
-    38: () => Snake.posy -= 5,
-    40: () => Snake.posy += 5
+    37: (s) => s.posx -= 10,
+    39: (s) => s.posx += 10,
+    38: (s) => s.posy -= 5,
+    40: (s) => s.posy += 5
 }
 
 let allowedDirections = [37, 39, 38, 40];
@@ -49,7 +48,7 @@ function init() {
 }
 
 function gameController() {
-    incrementDirection(ctx);
+    incrementDirection(Snake);
     renderBoard(ctx);
     renderTarget(ctx);
     renderSnake(ctx, Snake);
@@ -66,11 +65,11 @@ function gameController() {
     }
 
     if (isOutOfBounds()) {
-        Snake = Object.assign(Snake, geLegalCordinates(Snake));
+        Snake = Object.assign(Snake, getLegalCordinates(Snake));
     }
 }
 
-function geLegalCordinates(s) {
+function getLegalCordinates(s) {
     let x = s.posx;
     let y = s.posy;
 
@@ -110,9 +109,9 @@ function compareCordinates() {
         .some((x) => s.posx === x.posx && s.posy === x.posy);
 }
 
-function incrementDirection() {
+function incrementDirection(s) {
     if (currentDirection) {
-        directionalFlow[currentDirection]();
+        directionalFlow[currentDirection](s);
     }
 }
 
